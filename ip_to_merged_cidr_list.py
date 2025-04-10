@@ -15,8 +15,8 @@ def merge_cidr_list(input_csv: str, output_csv: str):
         .str.replace_all(".*大学$", "教育网")
     )
 
-    df = df.group_by(pl.col("运营商")).agg(pl.col("CIDR列表").str.join(", "))
-    df.write_csv(output_csv)
+    df = df.group_by(pl.col("运营商")).agg(pl.col("CIDR列表").str.join(" "))
+    df.write_csv(output_csv, include_bom=True)
 
     output_csv_selected = output_csv.replace(".csv", "-isp.csv")
     ISP_IN_CHINA = [
@@ -29,7 +29,7 @@ def merge_cidr_list(input_csv: str, output_csv: str):
     ]
     df.filter(pl.col("运营商").is_in(ISP_IN_CHINA)).sort(
         by=pl.col("运营商").map_elements(ISP_IN_CHINA.index, return_dtype=pl.UInt32)
-    ).write_csv(output_csv_selected)
+    ).write_csv(output_csv_selected, include_bom=True)
 
 
 if __name__ == "__main__":

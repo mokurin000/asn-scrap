@@ -18,7 +18,7 @@ def cidr_expand(ip_len: tuple[int, int]) -> str:
             continue
         cidr_list.append(f"{IPv4Address(current_ip)}/{idx}")
         current_ip += idx << bit_base
-    return ", ".join(cidr_list)
+    return " ".join(cidr_list)
 
 
 def ip_to_cidr_list(input_csv: str, output_csv: str):
@@ -31,4 +31,4 @@ def ip_to_cidr_list(input_csv: str, output_csv: str):
         .map_elements(cidr_expand, return_dtype=pl.String)
         .alias("CIDR列表")
     )
-    df.write_csv(output_csv)
+    df.write_csv(output_csv, include_bom=True)
