@@ -9,11 +9,8 @@ def merge_cidr_list(input_csv: str, output_csv: str):
 
     df = pl.read_csv(mid_file)
     df = df.select([pl.col("CIDR列表", "运营商")])
-    df = df.with_columns(
-        pl.col("运营商").map_elements(
-            lambda s: "广电" if s.endswith("广电") else s, return_dtype=pl.String
-        )
-    )
+    df = df.with_columns(pl.col("运营商").str.replace_all(".*广电$", "广电"))
+
     df = df.group_by(pl.col("运营商")).agg(pl.col("CIDR列表").str.join(", "))
     df.write_csv(output_csv)
 
