@@ -17,6 +17,11 @@ def merge_cidr_list(input_csv: str, output_csv: str):
     df = df.group_by(pl.col("运营商")).agg(pl.col("CIDR列表").str.join(", "))
     df.write_csv(output_csv)
 
+    output_csv_selected = output_csv.replace(".csv", "-isp.csv")
+    df.filter(pl.col("运营商").is_in(["电信", "广电", "移动", "联通"])).write_csv(
+        output_csv_selected
+    )
+
 
 if __name__ == "__main__":
     from sys import argv
