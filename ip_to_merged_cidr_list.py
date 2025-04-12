@@ -25,6 +25,7 @@ def merge_cidr_list(input_csv: str, output_csv: str):
         "联通",
         "移动",
         "广电",
+        "铁通",
         "方正宽带",
     ]
     df.filter(pl.col("运营商").is_in(ISP_IN_CHINA)).sort(
